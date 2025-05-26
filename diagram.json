@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "author": "Guilherme Camargo",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot", "top": -100, "left": 140, "attrs": {} },
+    { "type": "wokwi-led", "id": "ledVerde", "top": 100, "left": -20, "attrs": { "color": "green" } },
+    { "type": "wokwi-led", "id": "ledVermelho", "top": 100, "left": 60, "attrs": { "color": "red" } },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": 100, "left": 140, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "pot:GND", "esp:GND.1", "black", [] ],
+    [ "pot:VCC", "esp:3V3", "red", [] ],
+    [ "pot:SIG", "esp:34", "green", [] ],
+
+    [ "ledVerde:C", "esp:GND.2", "black", [] ],
+    [ "ledVerde:A", "esp:4", "green", [] ],
+
+    [ "ledVermelho:C", "esp:GND.2", "black", [] ],
+    [ "ledVermelho:A", "esp:2", "red", [] ],
+
+    [ "buzzer:1", "esp:5", "blue", [] ],
+    [ "buzzer:2", "esp:GND.2", "black", [] ]
+  ],
+  "dependencies": {}
+}

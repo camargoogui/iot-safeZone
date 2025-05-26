@@ -1,0 +1,177 @@
+[
+    {
+        "id": "mqtt",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "MQTT SafeZone",
+        "topic": "safezone/leituras",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "broker1",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 140,
+        "y": 60,
+        "wires": [
+            [
+                "fn_process"
+            ]
+        ]
+    },
+    {
+        "id": "fn_process",
+        "type": "function",
+        "z": "tab1",
+        "name": "Processar nível",
+        "func": "\nlet nivel = msg.payload.nivel;\nlet local = msg.payload.local_id;\n\nlet status = nivel <= 60 ? \"Normal\" : nivel <= 80 ? \"Alerta\" : \"Crítico\";\nlet cor = status === \"Crítico\" ? \"red\" : status === \"Alerta\" ? \"orange\" : \"green\";\n\n// Gauge e Chart\nlet msg1 = { payload: nivel };\n\n// Texto com status formatado\nlet msg2 = {\n  payload: {\n    local: local,\n    nivel: nivel,\n    status: status,\n    color: cor\n  }\n};\n\n// Última atualização\nlet msg3 = {\n  payload: \"Última atualização: \" + new Date().toLocaleTimeString()\n};\n\n// Envio de alerta\nlet msg4 = null;\nif (nivel > 80) {\n    msg4 = {\n        payload: JSON.stringify({\n            local_id: local,\n            tipo: \"Enchente\",\n            nivel: nivel,\n            status: \"crítico\"\n        }),\n        headers: { \"Content-Type\": \"application/json\" }\n    };\n}\n\nreturn [msg1, msg2, msg3, msg4];\n",
+        "outputs": 4,
+        "noerr": 0,
+        "x": 360,
+        "y": 60,
+        "wires": [
+            [
+                "gauge",
+                "chart"
+            ],
+            [
+                "template"
+            ],
+            [
+                "update"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "gauge",
+        "type": "ui_gauge",
+        "z": "tab1",
+        "name": "Nível da Água",
+        "group": "grupo1",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "donut",
+        "title": "Nível da Água (%)",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 100,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 610,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "chart",
+        "type": "ui_chart",
+        "z": "tab1",
+        "name": "Histórico Nível",
+        "group": "grupo1",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "label": "Histórico do Nível",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": "60",
+        "removeOlderUnit": "seconds",
+        "outputs": 1,
+        "x": 610,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "template",
+        "type": "ui_template",
+        "z": "tab1",
+        "group": "grupo1",
+        "name": "Status Formatado",
+        "order": 3,
+        "width": 6,
+        "height": 2,
+        "format": "\n<div style=\"font-size: 18px; font-weight: bold; color: {{msg.payload.color}}\">\n  Local: {{msg.payload.local}}<br>\n  Nível: {{msg.payload.nivel}}%<br>\n  Status: {{msg.payload.status}}\n</div>\n",
+        "x": 620,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "update",
+        "type": "ui_text",
+        "z": "tab1",
+        "group": "grupo1",
+        "order": 4,
+        "width": 6,
+        "height": 1,
+        "name": "Última atualização",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 620,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "broker1",
+        "type": "mqtt-broker",
+        "name": "HiveMQ",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "grupo1",
+        "type": "ui_group",
+        "name": "Painel SafeZone",
+        "tab": "aba1",
+        "order": 1,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "aba1",
+        "type": "ui_tab",
+        "name": "SafeZone",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
