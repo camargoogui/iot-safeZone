@@ -68,11 +68,14 @@ O painel exibe:
 ---
 
 ## 📁 Organização do Projeto
+
+```plaintext
 iot-safeZone/
-├── sketch.ino # Código principal do ESP32
-├── diagram.json # Esquema do circuito (Wokwi)
+├── sketch.ino              # Código principal do ESP32
+├── diagram.json            # Esquema do circuito (Wokwi)
 ├── dashboard_safezone.json # Flow Node-RED com dashboard
-└── README.md # Documentação do projeto
+└── README.md               # Documentação do projeto
+```
 
 
 ---
