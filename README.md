@@ -28,42 +28,47 @@ Criamos um sistema IoT capaz de monitorar o **nível da água** continuamente, u
 
 ## 📐 Esquema do Circuito (Wokwi)
 
-![Wokwi](https://wokwi.com/assets/logo/logo-only-light.png)
+<p align="center">
+  <img src="img/circuito-wokwi.png" width="500" alt="Circuito montado no Wokwi">
+</p>
 
-🔗 Projeto no Wokwi: [Clique aqui para abrir](https://wokwi.com/projects/432059421462344705)
+📸 *Imagem capturada com o potenciômetro simulando um nível de água de aproximadamente **79%**, acionando o LED vermelho.*
 
-Componentes:
+**Componentes conectados:**
 - Potenciômetro (nível de água simulado)
 - LED Verde (nível normal)
 - LED Vermelho (nível de alerta)
 - Buzzer (nível crítico > 80%)
+- ESP32 DevKit-C
+
+🔗 Projeto no Wokwi: [Clique para abrir](https://wokwi.com/projects/432059421462344705)
 
 ---
 
 ## 🖥️ Dashboard Node-RED
 
-O painel exibe:
+O painel exibe os dados em tempo real, facilitando a visualização e tomada de decisão:
 
 - 🟢 **Gauge** com o nível da água (0 a 100%)
-- 📈 **Gráfico histórico** em tempo real
-- 🔴 **Status do nível** (Normal, Alerta ou Crítico)
-- ⏱️ **Última atualização** em tempo real
+- 📈 **Gráfico histórico** dos níveis
+- 🔴 **Status atual** com destaque colorido (Normal, Alerta ou Crítico)
+- ⏱️ **Última atualização** (timestamp em tempo real)
 
-> O envio de dados é feito a cada 5 segundos. O buzzer e LED mudam conforme o nível.
+> O envio dos dados ocorre a cada 5 segundos via MQTT.
 
 ---
 
 ## ▶️ Como Executar o Projeto
 
 ### 1. Simulação no Wokwi
-- Acesse o link: [https://wokwi.com/projects/432059421462344705](https://wokwi.com/projects/432059421462344705)
-- Clique em "Start Simulation"
-- Gire o potenciômetro para simular o nível da água
+- Acesse: [https://wokwi.com/projects/432059421462344705](https://wokwi.com/projects/432059421462344705)
+- Clique em “Start Simulation”
+- Gire o potenciômetro para simular diferentes níveis de água
 
-### 2. Node-RED
-- Instale e execute Node-RED localmente (`http://localhost:1880`)
+### 2. Dashboard no Node-RED
+- Instale e execute o Node-RED localmente: `http://localhost:1880`
 - Importe o arquivo `dashboard_safezone.json`
-- Acesse o painel em: [http://localhost:1880/ui](http://localhost:1880/ui)
+- Acesse o painel visual: [http://localhost:1880/ui](http://localhost:1880/ui)
 
 ---
 
@@ -71,12 +76,13 @@ O painel exibe:
 
 ```plaintext
 iot-safeZone/
-├── sketch.ino              # Código principal do ESP32
-├── diagram.json            # Esquema do circuito (Wokwi)
-├── dashboard_safezone.json # Flow Node-RED com dashboard
-└── README.md               # Documentação do projeto
+├── sketch.ino               # Código principal do ESP32
+├── diagram.json             # Esquema do circuito no Wokwi
+├── dashboard_safezone.json  # Flow Node-RED com dashboard
+├── img/
+│   └── circuito-wokwi.png   # Imagem do circuito simulado
+└── README.md                # Documentação do projeto
 ```
-
 
 ---
 
